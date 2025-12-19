@@ -7,6 +7,6 @@ import java.util.List;
 
 @Repository
 public interface TransferRecordRepository extends JpaRepository<TransferRecord, Long> {
-    // Required for the GET /api/transfers/asset/{assetId} endpoint
+    // Custom finder to get transfer history for a specific asset
     List<TransferRecord> findByAssetId(Long assetId);
 }

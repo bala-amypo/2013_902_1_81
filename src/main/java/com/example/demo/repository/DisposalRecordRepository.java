@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DisposalRecordRepository extends JpaRepository<DisposalRecord, Long> {
-    // Standard CRUD methods used for tracking asset retirements
+    // standard crud methods handle tracking asset retirements
 }
