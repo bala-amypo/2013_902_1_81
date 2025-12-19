@@ -7,9 +7,9 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    // Used for authentication and checking email uniqueness during registration
+    // Custom query to find user by email for JWT authentication
     Optional<User> findByEmail(String email);
     
-    // Helper to quickly check if an email exists without loading the full entity
+    // Check if email exists for registration validation
     boolean existsByEmail(String email);
 }
