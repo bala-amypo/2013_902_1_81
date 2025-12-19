@@ -1,11 +1,7 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.Asset;
-import com.example.demo.entity.LifecycleEvent;
-import com.example.demo.entity.User;
-import com.example.demo.repository.AssetRepository;
-import com.example.demo.repository.LifecycleEventRepository;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
 import com.example.demo.service.LifecycleEventService;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -34,12 +30,12 @@ public class LifecycleEventServiceImpl implements LifecycleEventService {
     }
 
     @Override
-    public List<LifecycleEvent> getEventsForAsset(Long assetId) {
-        return lifecycleEventRepository.findByAssetId(assetId);
+    public List<LifecycleEvent> getEventsForAsset(Long assetId) { 
+        return lifecycleEventRepository.findByAssetId(assetId); 
     }
 
     @Override
-    public LifecycleEvent getEvent(Long id) {
-        return lifecycleEventRepository.findById(id).orElseThrow();
+    public LifecycleEvent getEvent(Long id) { 
+        return lifecycleEventRepository.findById(id).orElseThrow(); 
     }
 }

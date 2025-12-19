@@ -1,11 +1,8 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.Asset;
-import com.example.demo.entity.TransferRecord;
+import com.example.demo.entity.*;
 import com.example.demo.exception.ValidationException;
-import com.example.demo.repository.AssetRepository;
-import com.example.demo.repository.TransferRecordRepository;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.*;
 import com.example.demo.service.TransferRecordService;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -31,7 +28,7 @@ public class TransferRecordServiceImpl implements TransferRecordService {
             throw new ValidationException("Transfer date cannot be in the future");
         }
         if (record.getFromDepartment() != null && record.getFromDepartment().equals(record.getToDepartment())) {
-            throw new ValidationException("From department and To department must be different");
+            throw new ValidationException("From department must differ from to department");
         }
 
         Asset asset = assetRepository.findById(assetId).orElseThrow();
@@ -40,12 +37,12 @@ public class TransferRecordServiceImpl implements TransferRecordService {
     }
 
     @Override
-    public List<TransferRecord> getTransfersForAsset(Long assetId) {
-        return transferRecordRepository.findByAssetId(assetId);
+    public List<TransferRecord> getTransfersForAsset(Long assetId) { 
+        return transferRecordRepository.findByAssetId(assetId); 
     }
 
     @Override
-    public TransferRecord getTransfer(Long id) {
-        return transferRecordRepository.findById(id).orElseThrow();
+    public TransferRecord getTransfer(Long id) { 
+        return transferRecordRepository.findById(id).orElseThrow(); 
     }
 }

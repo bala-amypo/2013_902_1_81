@@ -16,20 +16,15 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    public Asset createAsset(Asset asset) {
-        return assetRepository.save(asset);
-    }
+    public Asset createAsset(Asset asset) { return assetRepository.save(asset); }
 
     @Override
     public Asset getAsset(Long id) {
-        return assetRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
+        return assetRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
     }
 
     @Override
-    public List<Asset> getAllAssets() {
-        return assetRepository.findAll();
-    }
+    public List<Asset> getAllAssets() { return assetRepository.findAll(); }
 
     @Override
     public void updateStatus(Long assetId, String status) {
