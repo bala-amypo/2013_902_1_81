@@ -24,7 +24,7 @@ public class SwaggerConfig {
                         .description("API for managing IT assets with full audit trails."))
                 // Set your specific server URL
                 .servers(List.of(
-                        new Server().url("https://9005.vs.amypo.ai")
+                        new Server().url("https://9001.vs.amypo.ai")
                 ));
     }
 }
