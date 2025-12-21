@@ -25,15 +25,6 @@ public class SwaggerConfig {
                 // Set your specific server URL
                 .servers(List.of(
                         new Server().url("https://9005.vs.amypo.ai")
-                ))
-                // Add the Global Security Requirement
-                .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
-                // Define the Security Scheme (JWT Bearer)
-                .components(new Components()
-                        .addSecuritySchemes(securitySchemeName, new SecurityScheme()
-                                .name(securitySchemeName)
-                                .type(SecurityScheme.Type.HTTP)
-                                .scheme("bearer")
-                                .bearerFormat("JWT")));
+                ));
     }
 }
