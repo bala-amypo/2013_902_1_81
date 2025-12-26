@@ -11,8 +11,11 @@ public class TransferRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String fromDepartment;
-    private String toDepartment;
+    private String fromHolder;
+
+    private String toHolder;
+
+    private String approvedBy;
 
     private LocalDateTime transferDate;
 
@@ -20,38 +23,82 @@ public class TransferRecord {
     @JoinColumn(name = "asset_id")
     private Asset asset;
 
+    // ✅ Required by JPA
     public TransferRecord() {
     }
 
-    public TransferRecord(String fromDepartment, String toDepartment, Asset asset) {
-        this.fromDepartment = fromDepartment;
-        this.toDepartment = toDepartment;
+    // ✅ FULL constructor required by test cases
+    public TransferRecord(Long id,
+                          String fromHolder,
+                          String toHolder,
+                          String approvedBy,
+                          LocalDateTime transferDate,
+                          Asset asset) {
+        this.id = id;
+        this.fromHolder = fromHolder;
+        this.toHolder = toHolder;
+        this.approvedBy = approvedBy;
+        this.transferDate = transferDate;
         this.asset = asset;
+    }
+
+    // ✅ Common constructor
+    public TransferRecord(String fromHolder,
+                          String toHolder,
+                          String approvedBy,
+                          Asset asset) {
+        this.fromHolder = fromHolder;
+        this.toHolder = toHolder;
+        this.approvedBy = approvedBy;
+        this.asset = asset;
+    }
+
+    // ✅ Auto set transferDate
+    @PrePersist
+    public void prePersist() {
         this.transferDate = LocalDateTime.now();
     }
+
+    // ===== GETTERS & SETTERS (ALL REQUIRED BY TESTS) =====
 
     public Long getId() {
         return id;
     }
 
-    public String getFromDepartment() {
-        return fromDepartment;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setFromDepartment(String fromDepartment) {
-        this.fromDepartment = fromDepartment;
+    public String getFromHolder() {
+        return fromHolder;
     }
 
-    public String getToDepartment() {
-        return toDepartment;
+    public void setFromHolder(String fromHolder) {
+        this.fromHolder = fromHolder;
     }
 
-    public void setToDepartment(String toDepartment) {
-        this.toDepartment = toDepartment;
+    public String getToHolder() {
+        return toHolder;
+    }
+
+    public void setToHolder(String toHolder) {
+        this.toHolder = toHolder;
+    }
+
+    public String getApprovedBy() {
+        return approvedBy;
+    }
+
+    public void setApprovedBy(String approvedBy) {
+        this.approvedBy = approvedBy;
     }
 
     public LocalDateTime getTransferDate() {
         return transferDate;
+    }
+
+    public void setTransferDate(LocalDateTime transferDate) {
+        this.transferDate = transferDate;
     }
 
     public Asset getAsset() {

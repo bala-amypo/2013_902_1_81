@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -21,10 +22,35 @@ public class User {
 
     private String role;
 
+    private LocalDateTime createdAt;
+
+    // ✅ REQUIRED BY JPA
     public User() {
     }
 
-    public User(String fullName, String email, String department, String password, String role) {
+    // ✅ REQUIRED BY TEST CASES (FULL CONSTRUCTOR)
+    public User(Long id,
+                String fullName,
+                String email,
+                String department,
+                String password,
+                String role,
+                LocalDateTime createdAt) {
+        this.id = id;
+        this.fullName = fullName;
+        this.email = email;
+        this.department = department;
+        this.password = password;
+        this.role = role;
+        this.createdAt = createdAt;
+    }
+
+    // ✅ REQUIRED BY CONTROLLER
+    public User(String fullName,
+                String email,
+                String department,
+                String password,
+                String role) {
         this.fullName = fullName;
         this.email = email;
         this.department = department;
@@ -32,8 +58,20 @@ public class User {
         this.role = role;
     }
 
+    // ✅ AUTO SET createdAt
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    // ===== GETTERS & SETTERS (ALL REQUIRED BY TESTS) =====
+
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFullName() {
@@ -74,5 +112,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
