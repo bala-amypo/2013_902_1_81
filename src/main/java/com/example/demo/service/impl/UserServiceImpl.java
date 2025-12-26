@@ -1,13 +1,15 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.User;
-import com.example.demo.exception.*;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public class UserServiceImpl {
+@Service
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -18,25 +20,19 @@ public class UserServiceImpl {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User registerUser(User user) {
-        if (userRepository.existsByEmail(user.getEmail()))
-            throw new ValidationException("Email already in use");
-
-        if (user.getPassword().length() < 8)
-            throw new ValidationException("Password must be at least 8 characters");
-
-        if (user.getDepartment() == null)
-            throw new ValidationException("Department is required");
-
+    @Override
+    public User register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole("USER");
         return userRepository.save(user);
     }
 
-    public User getUser(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    @Override
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
     }
 
+    @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
