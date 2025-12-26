@@ -35,16 +35,15 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
+    public List<Asset> getAssetsByStatus(String status) {
+        return assetRepository.findByStatus(status);
+    }
+
+    @Override
     public Asset updateStatus(Long assetId, String status) {
         Asset asset = getAssetById(assetId);
         asset.setStatus(status);
         asset.setUpdatedAt(LocalDateTime.now());
         return assetRepository.save(asset);
-    }
-
-    // ❌ NO @Override HERE
-    // ❌ This method is OPTIONAL and NOT part of interface
-    public List<Asset> getAssetsByStatus(String status) {
-        return assetRepository.findByStatus(status);
     }
 }

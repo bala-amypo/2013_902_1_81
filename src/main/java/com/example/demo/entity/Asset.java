@@ -1,39 +1,38 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Entity
 public class Asset {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String assetTag;
     private String assetType;
-    private String manufacturer;
+    private String brand;
     private LocalDate purchaseDate;
     private String status;
+
+    @ManyToOne
     private User currentHolder;
+
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    public Asset() {}
-
-    public Asset(Long id, String assetTag, String assetType, String manufacturer,
-                 LocalDate purchaseDate, String status,
-                 User currentHolder, LocalDateTime createdAt) {
-        this.id = id;
-        this.assetTag = assetTag;
-        this.assetType = assetType;
-        this.manufacturer = manufacturer;
-        this.purchaseDate = purchaseDate;
-        this.status = status;
-        this.currentHolder = currentHolder;
-        this.createdAt = createdAt;
-    }
-
+    // ---------- Lifecycle ----------
+    @PrePersist
     public void prePersist() {
-        if (status == null) status = "AVAILABLE";
-        if (createdAt == null) createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
+        if (this.status == null) {
+            this.status = "AVAILABLE";
+        }
     }
 
+    // ---------- Getters & Setters ----------
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -43,8 +42,8 @@ public class Asset {
     public String getAssetType() { return assetType; }
     public void setAssetType(String assetType) { this.assetType = assetType; }
 
-    public String getManufacturer() { return manufacturer; }
-    public void setManufacturer(String manufacturer) { this.manufacturer = manufacturer; }
+    public String getBrand() { return brand; }
+    public void setBrand(String brand) { this.brand = brand; }
 
     public LocalDate getPurchaseDate() { return purchaseDate; }
     public void setPurchaseDate(LocalDate purchaseDate) { this.purchaseDate = purchaseDate; }
@@ -57,4 +56,7 @@ public class Asset {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

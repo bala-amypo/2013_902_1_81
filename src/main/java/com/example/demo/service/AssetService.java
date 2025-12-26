@@ -11,5 +11,7 @@ public interface AssetService {
 
     List<Asset> getAllAssets();
 
+    List<Asset> getAssetsByStatus(String status);
+
     Asset updateStatus(Long assetId, String status);
 }
