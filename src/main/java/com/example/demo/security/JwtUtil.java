@@ -11,7 +11,7 @@ import java.util.Map;
 public class JwtUtil {
 
     private final Key key =
-            Keys.hmacShaKeyFor("test-secret-key-1234567890".getBytes());
+            Keys.hmacShaKeyFor("test-secret-key-1234567890test-secret-key".getBytes());
 
     public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
@@ -41,16 +41,16 @@ public class JwtUtil {
     }
 
     public String extractUsername(String token) {
-        return parseToken(token).getPayload().getSubject();
+        return parseToken(token).getBody().getSubject();
     }
 
     public String extractRole(String token) {
-        return (String) parseToken(token).getPayload().get("role");
+        return (String) parseToken(token).getBody().get("role");
     }
 
     public Long extractUserId(String token) {
         return ((Number) parseToken(token)
-                .getPayload().get("userId")).longValue();
+                .getBody().get("userId")).longValue();
     }
 
     public boolean isTokenValid(String token, String username) {
