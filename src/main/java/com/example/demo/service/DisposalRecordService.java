@@ -2,9 +2,13 @@ package com.example.demo.service;
 
 import com.example.demo.entity.DisposalRecord;
 
+import java.util.List;
+
 public interface DisposalRecordService {
 
-    DisposalRecord disposeAsset(DisposalRecord record);
+    DisposalRecord getDisposal(Long id);
 
-    DisposalRecord getByAsset(Long assetId);
+    DisposalRecord createDisposal(Long assetId, DisposalRecord record);
+
+    List<DisposalRecord> getByAsset(Long assetId);
 }

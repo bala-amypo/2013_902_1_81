@@ -43,7 +43,7 @@ public class DisposalRecordServiceImpl implements DisposalRecordService {
     }
 
     @Override
-    public List<DisposalRecord> getDisposalsForAsset(Long assetId) {
+    public List<DisposalRecord> getByAsset(Long assetId) {
         return disposalRecordRepository.findByAsset_Id(assetId);
     }
 }

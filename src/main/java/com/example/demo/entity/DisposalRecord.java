@@ -42,6 +42,19 @@ public class DisposalRecord {
         this.createdAt = LocalDateTime.now();
     }
 
-    public Long getId() { return id; }
-    public User getApprovedBy() { return approvedBy; }
+    public Long getId() {
+        return id;
+    }
+
+    public Asset getAsset() {
+        return asset;
+    }
+
+    public void setAsset(Asset asset) {
+        this.asset = asset;
+    }
+
+    public User getApprovedBy() {
+        return approvedBy;
+    }
 }
