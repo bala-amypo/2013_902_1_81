@@ -26,11 +26,12 @@ public class LifecycleEventServiceImpl implements LifecycleEventService {
     }
 
     @Override
-    public LifecycleEvent logEvent(Long assetId, Long userId, LifecycleEvent event) {
-        Asset asset = assetRepository.findById(assetId)
+    public LifecycleEvent createEvent(LifecycleEvent event) {
+
+        Asset asset = assetRepository.findById(event.getAsset().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
 
-        User user = userRepository.findById(userId)
+        User user = userRepository.findById(event.getPerformedBy().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         event.setAsset(asset);

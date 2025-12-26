@@ -28,13 +28,13 @@ public class TransferRecordServiceImpl implements TransferRecordService {
     }
 
     @Override
-    public TransferRecord createTransfer(Long assetId, TransferRecord record) {
+    public TransferRecord transferAsset(TransferRecord record) {
 
         if (record.getTransferDate().isAfter(LocalDate.now())) {
             throw new ValidationException("Transfer date cannot be in the future");
         }
 
-        Asset asset = assetRepository.findById(assetId)
+        Asset asset = assetRepository.findById(record.getAsset().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
 
         User approver = userRepository.findById(record.getApprovedBy().getId())

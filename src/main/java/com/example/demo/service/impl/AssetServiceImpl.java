@@ -33,6 +33,11 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
+    public List<Asset> getAssetsByStatus(String status) {
+        return assetRepository.findByStatus(status);
+    }
+
+    @Override
     public Asset updateStatus(Long assetId, String status) {
         Asset asset = getAssetById(assetId);
         asset.setStatus(status);
