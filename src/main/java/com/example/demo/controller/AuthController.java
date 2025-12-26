@@ -1,64 +1,45 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.AuthResponse;
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.User;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
     private final UserService userService;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(AuthenticationManager authenticationManager,
-                          JwtUtil jwtUtil,
-                          UserService userService) {
-        this.authenticationManager = authenticationManager;
-        this.jwtUtil = jwtUtil;
+    public AuthController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(
-            @RequestBody RegisterRequest request) {
-
+    public User register(@RequestBody RegisterRequest request) {
         User user = new User(
-                request.getFullName(),
+                null,
+                request.getName(),
                 request.getEmail(),
                 request.getDepartment(),
+                "USER",
                 request.getPassword(),
-                "USER"
+                null
         );
-
-        userService.register(user);
-
-        return ResponseEntity.ok(
-                new AuthResponse(null, "User registered successfully")
-        );
+        return userService.registerUser(user);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(
-            @RequestBody LoginRequest request) {
-
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(), request.getPassword())
-        );
-
-        String token = jwtUtil.generateToken(request.getEmail());
-
-        return ResponseEntity.ok(
-                new AuthResponse(token, "Login successful")
+    public String login(@RequestBody LoginRequest request) {
+        return jwtUtil.generateToken(
+                Map.of("email", request.getEmail()),
+                request.getEmail()
         );
     }
 }
