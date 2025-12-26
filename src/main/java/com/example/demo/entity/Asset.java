@@ -12,38 +12,42 @@ public class Asset {
     private Long id;
 
     private String assetTag;
-    private String assetType;
-    private String brand;
+    private String name;
+    private String category;
     private LocalDate purchaseDate;
     private String status;
 
     @ManyToOne
-    private User currentHolder;
+    private User owner;
 
-    private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // ---------- Lifecycle ----------
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-        if (this.status == null) {
-            this.status = "AVAILABLE";
-        }
+    public Asset() {}
+
+    public Asset(Long id, String assetTag, String name, String category,
+                 LocalDate purchaseDate, String status,
+                 User owner, LocalDateTime updatedAt) {
+        this.id = id;
+        this.assetTag = assetTag;
+        this.name = name;
+        this.category = category;
+        this.purchaseDate = purchaseDate;
+        this.status = status;
+        this.owner = owner;
+        this.updatedAt = updatedAt;
     }
 
-    // ---------- Getters & Setters ----------
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
     public String getAssetTag() { return assetTag; }
     public void setAssetTag(String assetTag) { this.assetTag = assetTag; }
 
-    public String getAssetType() { return assetType; }
-    public void setAssetType(String assetType) { this.assetType = assetType; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getBrand() { return brand; }
-    public void setBrand(String brand) { this.brand = brand; }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
     public LocalDate getPurchaseDate() { return purchaseDate; }
     public void setPurchaseDate(LocalDate purchaseDate) { this.purchaseDate = purchaseDate; }
@@ -51,11 +55,8 @@ public class Asset {
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
-    public User getCurrentHolder() { return currentHolder; }
-    public void setCurrentHolder(User currentHolder) { this.currentHolder = currentHolder; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public User getOwner() { return owner; }
+    public void setOwner(User owner) { this.owner = owner; }
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
