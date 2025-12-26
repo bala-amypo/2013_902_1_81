@@ -2,9 +2,10 @@ package com.example.demo.repository;
 
 import com.example.demo.entity.DisposalRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
+import java.util.Optional;
+
 public interface DisposalRecordRepository extends JpaRepository<DisposalRecord, Long> {
-    // standard crud methods handle tracking asset retirements
+
+    Optional<DisposalRecord> findByAsset_Id(Long assetId);
 }
