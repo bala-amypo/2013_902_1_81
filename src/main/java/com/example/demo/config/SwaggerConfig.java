@@ -16,25 +16,30 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
+
         final String securitySchemeName = "bearerAuth";
-        
+
+        Server httpsServer = new Server()
+                .url("https://9028.408procr.amypo.ai")
+                .description("HTTPS Proxy Server");
+
         return new OpenAPI()
                 .info(new Info()
                         .title("Digital Asset Lifecycle & Audit Trail API")
                         .version("1.0")
-                        .description("API for managing IT assets with full audit trails."))
-                .servers(List.of(
-                        new Server().url("https://9534.pro604cr.amypo.ai")
-                ))
-                // This line adds the padlock to the endpoints
+                        .description("API for managing IT assets with full audit trails.")
+                )
+                .servers(List.of(httpsServer))
+                // 🔐 Enable JWT padlock
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
-                // This block defines how the "Authorize" button works
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName,
                                 new SecurityScheme()
                                         .name(securitySchemeName)
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
-                                        .bearerFormat("JWT")));
+                                        .bearerFormat("JWT")
+                        )
+                );
     }
 }
