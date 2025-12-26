@@ -1,7 +1,0 @@
-<suite name="DigitalAssetLifecycleSuite">$
-    <test name="AllTests">$
-        <classes>$
-            <class name="com.example.demo.DigitalAssetLifecycleAuditTrailApiTest"/>$
-        </classes>$
-    </test>$
-</suite>$
