@@ -2,15 +2,13 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Asset;
 import com.example.demo.service.AssetService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/assets")
-@Tag(name = "AssetController")
+@RequestMapping("/assets")
 public class AssetController {
 
     private final AssetService assetService;
@@ -29,14 +27,14 @@ public class AssetController {
         return ResponseEntity.ok(assetService.getAllAssets());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Asset> getAsset(@PathVariable Long id) {
-        return ResponseEntity.ok(assetService.getAsset(id));
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Asset>> getAssetsByStatus(
+            @PathVariable String status) {
+        return ResponseEntity.ok(assetService.getAssetsByStatus(status));
     }
 
-    @PutMapping("/status/{id}")
-    public ResponseEntity<Void> updateStatus(@PathVariable Long id, @RequestParam String status) {
-        assetService.updateStatus(id, status);
-        return ResponseEntity.ok().build();
+    @GetMapping("/{id}")
+    public ResponseEntity<Asset> getAssetById(@PathVariable Long id) {
+        return ResponseEntity.ok(assetService.getAssetById(id));
     }
 }

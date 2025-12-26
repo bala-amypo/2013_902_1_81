@@ -2,37 +2,34 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.TransferRecord;
 import com.example.demo.service.TransferRecordService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/transfers")
-@Tag(name = "TransferRecordController")
+@RequestMapping("/transfers")
 public class TransferRecordController {
 
-    private final TransferRecordService transferService;
+    private final TransferRecordService transferRecordService;
 
-    public TransferRecordController(TransferRecordService transferService) {
-        this.transferService = transferService;
+    public TransferRecordController(TransferRecordService transferRecordService) {
+        this.transferRecordService = transferRecordService;
     }
 
-    @PostMapping("/{assetId}")
-    public ResponseEntity<TransferRecord> createTransfer(
-            @PathVariable Long assetId, 
+    @PostMapping
+    public ResponseEntity<TransferRecord> transferAsset(
             @RequestBody TransferRecord record) {
-        return ResponseEntity.ok(transferService.createTransfer(assetId, record));
+        return ResponseEntity.ok(
+                transferRecordService.transferAsset(record)
+        );
     }
 
     @GetMapping("/asset/{assetId}")
-    public ResponseEntity<List<TransferRecord>> getTransferHistory(@PathVariable Long assetId) {
-        return ResponseEntity.ok(transferService.getTransfersForAsset(assetId));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<TransferRecord> getTransfer(@PathVariable Long id) {
-        return ResponseEntity.ok(transferService.getTransfer(id));
+    public ResponseEntity<List<TransferRecord>> getTransfersByAsset(
+            @PathVariable Long assetId) {
+        return ResponseEntity.ok(
+                transferRecordService.getTransfersByAsset(assetId)
+        );
     }
 }
