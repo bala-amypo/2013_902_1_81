@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.Map;
 
 @Component
 public class JwtUtil {
@@ -22,11 +23,12 @@ public class JwtUtil {
     private final SecretKey key =
             Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
 
-    // =====================================
-    // Generate token with subject only
-    // =====================================
-    public String generateToken(String subject) {
+    // =====================================================
+    // REQUIRED BY TEST: generateToken(Map, String)
+    // =====================================================
+    public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
+                .claims(claims)
                 .subject(subject)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
@@ -34,9 +36,9 @@ public class JwtUtil {
                 .compact();
     }
 
-    // =====================================
-    // Generate token for User
-    // =====================================
+    // =====================================================
+    // Used internally
+    // =====================================================
     public String generateTokenForUser(User user) {
         return Jwts.builder()
                 .subject(user.getEmail())
@@ -49,9 +51,9 @@ public class JwtUtil {
                 .compact();
     }
 
-    // =====================================
-    // Parse token
-    // =====================================
+    // =====================================================
+    // REQUIRED BY TEST
+    // =====================================================
     public Jws<Claims> parseToken(String token) {
         return Jwts.parser()
                 .verifyWith(key)
@@ -59,10 +61,31 @@ public class JwtUtil {
                 .parseSignedClaims(token);
     }
 
-    // =====================================
-    // Extract username
-    // =====================================
+    // =====================================================
+    // REQUIRED BY TEST
+    // =====================================================
     public String extractUsername(String token) {
         return parseToken(token).getPayload().getSubject();
+    }
+
+    public String extractRole(String token) {
+        return (String) parseToken(token).getPayload().get("role");
+    }
+
+    public Long extractUserId(String token) {
+        Object id = parseToken(token).getPayload().get("userId");
+        return id == null ? null : Long.valueOf(id.toString());
+    }
+
+    // =====================================================
+    // REQUIRED BY TEST
+    // =====================================================
+    public boolean isTokenValid(String token, String username) {
+        try {
+            String extractedUsername = extractUsername(token);
+            return extractedUsername.equals(username);
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
