@@ -32,46 +32,48 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            // ✅ CORS
+            // ✅ ENABLE CORS HERE
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-            // ✅ Disable CSRF
+            // ✅ Disable CSRF for REST APIs
             .csrf(csrf -> csrf.disable())
 
-            // ✅ VERY IMPORTANT: PERMIT EVERYTHING (for tests)
+            // ✅ Authorization rules
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                        "/**"
+                        "/auth/register",
+                        "/auth/login",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/h2-console/**"
                 ).permitAll()
+                .requestMatchers("/api/**").authenticated()
+                .anyRequest().authenticated()
             )
 
-            // ✅ Stateless
+            // ✅ Stateless JWT-based auth
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
 
-            // ❌ DO NOT register JWT filter (breaks tests)
-            // .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            // ✅ JWT filter
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-            ;
-
-        // ✅ REQUIRED FOR H2 CONSOLE
-        http.headers(headers ->
-            headers.frameOptions(frame -> frame.disable())
-        );
+        // ✅ Needed for H2 Console
+        http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
     }
 
-    // ✅ FIXED CORS (no credential + wildcard conflict)
+    // ✅ GLOBAL CORS CONFIGURATION (CRITICAL FIX)
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOriginPatterns(List.of("*"));
+        configuration.setAllowedOriginPatterns(List.of("*")); // allow HTTPS proxy domains
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(false); // 🔑 FIX
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
