@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.User;
 import com.example.demo.security.JwtUtil;
-import com.example.demo.Service.UserService;
-import com.example.digiasset.dto.AuthResponse;
-import com.example.digiasset.dto.LoginRequest;
-import com.example.digiasset.dto.RegisterRequest;
+import com.example.demo.service.UserService;
+import com.example.demo.dto.AuthResponse;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
