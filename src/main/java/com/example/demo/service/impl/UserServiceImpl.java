@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
             throw new ValidationException("Email already in use");
         }
 
-        if (user.getPassword() == null || user.getPassword().length() < 8) {
+        if (user.getPassword().length() < 8) {
             throw new ValidationException("Password must be at least 8 characters");
         }
 
@@ -35,21 +35,21 @@ public class UserServiceImpl implements UserService {
             throw new ValidationException("Department is required");
         }
 
+        user.setId(null);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole("USER");
+        user.prePersist();
 
         return userRepository.save(user);
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public User getUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     @Override
-    public User getByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found"));
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }

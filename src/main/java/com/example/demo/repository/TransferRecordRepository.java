@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface TransferRecordRepository extends JpaRepository<TransferRecord, Long> {
 
-    // Used in tests: transfer history for an asset
     List<TransferRecord> findByAsset_Id(Long assetId);
 }

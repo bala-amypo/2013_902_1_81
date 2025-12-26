@@ -4,12 +4,9 @@ import com.example.demo.entity.Asset;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.AssetRepository;
 import com.example.demo.service.AssetService;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-@Service
 public class AssetServiceImpl implements AssetService {
 
     private final AssetRepository assetRepository;
@@ -20,11 +17,12 @@ public class AssetServiceImpl implements AssetService {
 
     @Override
     public Asset createAsset(Asset asset) {
+        asset.prePersist();
         return assetRepository.save(asset);
     }
 
     @Override
-    public Asset getAssetById(Long id) {
+    public Asset getAsset(Long id) {
         return assetRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
     }
@@ -35,15 +33,9 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    public List<Asset> getAssetsByStatus(String status) {
-        return assetRepository.findByStatus(status);
-    }
-
-    @Override
     public Asset updateStatus(Long assetId, String status) {
-        Asset asset = getAssetById(assetId);
+        Asset asset = getAsset(assetId);
         asset.setStatus(status);
-        asset.setUpdatedAt(LocalDateTime.now());
         return assetRepository.save(asset);
     }
 }
