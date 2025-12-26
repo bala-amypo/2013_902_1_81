@@ -5,59 +5,58 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "assets")
 public class Asset {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
+    @Column(unique = true)
     private String assetTag;
-    private String name;
-    private String category;
+
+    private String assetType;
+    private String model;
     private LocalDate purchaseDate;
     private String status;
 
     @ManyToOne
-    private User owner;
+    private User currentHolder;
 
-    private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
 
-    public Asset() {}
+    public Asset() {
+    }
 
-    public Asset(Long id, String assetTag, String name, String category,
+    public Asset(Long id, String assetTag, String assetType, String model,
                  LocalDate purchaseDate, String status,
-                 User owner, LocalDateTime updatedAt) {
+                 User currentHolder, LocalDateTime createdAt) {
         this.id = id;
         this.assetTag = assetTag;
-        this.name = name;
-        this.category = category;
+        this.assetType = assetType;
+        this.model = model;
         this.purchaseDate = purchaseDate;
         this.status = status;
-        this.owner = owner;
-        this.updatedAt = updatedAt;
+        this.currentHolder = currentHolder;
+        this.createdAt = createdAt;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (this.status == null) {
+            this.status = "AVAILABLE";
+        }
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
     }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
     public String getAssetTag() { return assetTag; }
-    public void setAssetTag(String assetTag) { this.assetTag = assetTag; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
-
-    public LocalDate getPurchaseDate() { return purchaseDate; }
-    public void setPurchaseDate(LocalDate purchaseDate) { this.purchaseDate = purchaseDate; }
-
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
-    public User getOwner() { return owner; }
-    public void setOwner(User owner) { this.owner = owner; }
-
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public User getCurrentHolder() { return currentHolder; }
 }

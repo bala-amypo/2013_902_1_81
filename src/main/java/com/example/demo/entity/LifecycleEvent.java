@@ -4,49 +4,58 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "lifecycle_events")
 public class LifecycleEvent {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
+
+    @ManyToOne
+    private Asset asset;
 
     private String eventType;
     private String eventDescription;
     private LocalDateTime eventDate;
 
     @ManyToOne
-    private Asset asset;
-
-    @ManyToOne
     private User performedBy;
 
-    public LifecycleEvent() {}
+    public LifecycleEvent() {
+    }
 
-    public LifecycleEvent(Long id, String eventType, String eventDescription,
-                          LocalDateTime eventDate, Asset asset, User performedBy) {
+    public LifecycleEvent(Long id, Asset asset, String eventType,
+                          String eventDescription, LocalDateTime eventDate,
+                          User performedBy) {
         this.id = id;
+        this.asset = asset;
         this.eventType = eventType;
         this.eventDescription = eventDescription;
         this.eventDate = eventDate;
-        this.asset = asset;
         this.performedBy = performedBy;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (this.eventDate == null) {
+            this.eventDate = LocalDateTime.now();
+        }
     }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
-    public String getEventType() { return eventType; }
-    public void setEventType(String eventType) { this.eventType = eventType; }
-
-    public String getEventDescription() { return eventDescription; }
-    public void setEventDescription(String eventDescription) { this.eventDescription = eventDescription; }
-
-    public LocalDateTime getEventDate() { return eventDate; }
-    public void setEventDate(LocalDateTime eventDate) { this.eventDate = eventDate; }
 
     public Asset getAsset() { return asset; }
     public void setAsset(Asset asset) { this.asset = asset; }
 
     public User getPerformedBy() { return performedBy; }
     public void setPerformedBy(User performedBy) { this.performedBy = performedBy; }
+
+    public String getEventType() { return eventType; }
+    public void setEventType(String eventType) { this.eventType = eventType; }
+
+    public String getEventDescription() { return eventDescription; }
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
+    }
 }
