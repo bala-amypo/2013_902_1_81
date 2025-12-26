@@ -21,11 +21,9 @@ public class User {
     private String password;
     private LocalDateTime createdAt;
 
-    // No-arg constructor
     public User() {
     }
 
-    // Parameterized constructor
     public User(Long id, String fullName, String email, String department,
                 String role, String password, LocalDateTime createdAt) {
         this.id = id;
@@ -37,7 +35,6 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    // PrePersist defaults
     @PrePersist
     public void prePersist() {
         if (this.role == null) {
@@ -48,41 +45,19 @@ public class User {
         }
     }
 
-    // Getters and setters
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getFullName() {
-        return fullName;
-    }
+    public String getDepartment() { return department; }
+    public void setDepartment(String department) { this.department = department; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getRole() { return role; }
 
-    public String getDepartment() {
-        return department;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public String getRole() {
-        return role;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    // ✅ REQUIRED FOR UserServiceImpl
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
 }

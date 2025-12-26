@@ -58,4 +58,6 @@ public class LifecycleEvent {
     public void setEventDescription(String eventDescription) {
         this.eventDescription = eventDescription;
     }
+
+    public LocalDateTime getEventDate() { return eventDate; }
 }

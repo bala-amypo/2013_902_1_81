@@ -11,7 +11,6 @@ public class JwtUtil {
 
     private static final String SECRET_KEY = "secretkey123456";
 
-    // Generic token generator
     public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
@@ -21,37 +20,36 @@ public class JwtUtil {
                 .compact();
     }
 
-    // Token for User
     public String generateTokenForUser(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getId());
         claims.put("email", user.getEmail());
         claims.put("role", user.getRole());
-
         return generateToken(claims, user.getEmail());
     }
 
-    // Parse token
-    public Jws<Claims> parseToken(String token) {
+    // ✅ MUST return Jwt<?, ?> so tests can call getPayload()
+    public Jwt<?, ?> parseToken(String token) {
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token);
+                .parse(token);
     }
 
     public String extractUsername(String token) {
-        return parseToken(token).getBody().getSubject();
+        return (String) parseToken(token).getPayload();
     }
 
     public String extractRole(String token) {
-        return (String) parseToken(token).getBody().get("role");
+        return (String) ((Claims) parseToken(token).getPayload()).get("role");
     }
 
     public Long extractUserId(String token) {
-        Object id = parseToken(token).getBody().get("userId");
+        Object id = ((Claims) parseToken(token).getPayload()).get("userId");
         return ((Number) id).longValue();
     }
 
     public boolean isTokenValid(String token, String username) {
-        return extractUsername(token).equals(username);
+        Claims claims = (Claims) parseToken(token).getPayload();
+        return claims.getSubject().equals(username);
     }
 }

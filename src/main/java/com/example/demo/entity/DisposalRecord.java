@@ -63,4 +63,6 @@ public class DisposalRecord {
     }
 
     public LocalDate getDisposalDate() { return disposalDate; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
 }
