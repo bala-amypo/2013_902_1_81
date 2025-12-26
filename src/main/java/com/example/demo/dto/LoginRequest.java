@@ -7,7 +7,6 @@ public class LoginRequest {
 
     public LoginRequest() {}
 
-    // ✅ REQUIRED BY TESTS
     public LoginRequest(String email, String password) {
         this.email = email;
         this.password = password;

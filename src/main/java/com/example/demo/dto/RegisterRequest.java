@@ -9,11 +9,8 @@ public class RegisterRequest {
 
     public RegisterRequest() {}
 
-    // ✅ REQUIRED BY TESTS
-    public RegisterRequest(String fullName,
-                           String email,
-                           String department,
-                           String password) {
+    public RegisterRequest(String fullName, String email,
+                           String department, String password) {
         this.fullName = fullName;
         this.email = email;
         this.department = department;
