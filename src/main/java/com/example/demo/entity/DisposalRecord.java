@@ -1,94 +1,47 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "disposal_records")
 public class DisposalRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String reason;
-
-    private String approvedBy;
-
-    private LocalDateTime disposalDate;
-
     @ManyToOne
-    @JoinColumn(name = "asset_id")
     private Asset asset;
 
-    // ✅ Required by JPA
-    public DisposalRecord() {
-    }
+    private String disposalMethod;
+    private LocalDate disposalDate;
 
-    // ✅ FULL constructor required by test cases
-    public DisposalRecord(Long id,
-                          Asset asset,
-                          String reason,
-                          String approvedBy,
-                          LocalDateTime disposalDate) {
+    @ManyToOne
+    private User approvedBy;
+
+    private String notes;
+    private LocalDateTime createdAt;
+
+    public DisposalRecord() {}
+
+    public DisposalRecord(Long id, Asset asset, String disposalMethod,
+                          LocalDate disposalDate, User approvedBy,
+                          String notes, LocalDateTime createdAt) {
         this.id = id;
         this.asset = asset;
-        this.reason = reason;
-        this.approvedBy = approvedBy;
+        this.disposalMethod = disposalMethod;
         this.disposalDate = disposalDate;
+        this.approvedBy = approvedBy;
+        this.notes = notes;
+        this.createdAt = createdAt;
     }
 
-    // ✅ Common constructor
-    public DisposalRecord(String reason, Asset asset) {
-        this.reason = reason;
-        this.asset = asset;
-    }
-
-    // ✅ Auto-set disposal date
     @PrePersist
     public void prePersist() {
-        this.disposalDate = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
-    // ===== GETTERS & SETTERS (ALL REQUIRED BY TESTS) =====
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public String getApprovedBy() {
-        return approvedBy;
-    }
-
-    public void setApprovedBy(String approvedBy) {
-        this.approvedBy = approvedBy;
-    }
-
-    public LocalDateTime getDisposalDate() {
-        return disposalDate;
-    }
-
-    public void setDisposalDate(LocalDateTime disposalDate) {
-        this.disposalDate = disposalDate;
-    }
-
-    public Asset getAsset() {
-        return asset;
-    }
-
-    public void setAsset(Asset asset) {
-        this.asset = asset;
-    }
+    public Long getId() { return id; }
+    public User getApprovedBy() { return approvedBy; }
 }
