@@ -4,9 +4,12 @@ import com.example.demo.entity.Asset;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.AssetRepository;
 import com.example.demo.service.AssetService;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public class AssetServiceImpl implements AssetService {
 
     private final AssetRepository assetRepository;
@@ -17,7 +20,6 @@ public class AssetServiceImpl implements AssetService {
 
     @Override
     public Asset createAsset(Asset asset) {
-        asset.prePersist();
         return assetRepository.save(asset);
     }
 
@@ -33,14 +35,16 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    public List<Asset> getAssetsByStatus(String status) {
-        return assetRepository.findByStatus(status);
-    }
-
-    @Override
     public Asset updateStatus(Long assetId, String status) {
         Asset asset = getAssetById(assetId);
         asset.setStatus(status);
+        asset.setUpdatedAt(LocalDateTime.now());
         return assetRepository.save(asset);
+    }
+
+    // ❌ NO @Override HERE
+    // ❌ This method is OPTIONAL and NOT part of interface
+    public List<Asset> getAssetsByStatus(String status) {
+        return assetRepository.findByStatus(status);
     }
 }
