@@ -1,43 +1,40 @@
 package com.example.demo.security;
 
+import com.example.demo.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 public class JwtUtil {
 
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private final long EXPIRATION = 1000 * 60 * 60;
 
-    // REQUIRED by tests
     public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
-                .signWith(key)
+                .signWith(secretKey)
                 .compact();
     }
 
-    // REQUIRED by tests
-    public String generateTokenForUser(com.example.demo.entity.User user) {
-        return generateToken(
-                Map.of(
-                        "userId", user.getId(),
-                        "email", user.getEmail(),
-                        "role", user.getRole()
-                ),
-                user.getEmail()
-        );
+    public String generateTokenForUser(User user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("email", user.getEmail());
+        claims.put("role", user.getRole());
+        claims.put("userId", user.getId());
+        return generateToken(claims, user.getEmail());
     }
 
     public Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -48,12 +45,11 @@ public class JwtUtil {
     }
 
     public String extractRole(String token) {
-        return (String) extractAllClaims(token).get("role");
+        return extractAllClaims(token).get("role", String.class);
     }
 
     public Long extractUserId(String token) {
-        Object id = extractAllClaims(token).get("userId");
-        return id == null ? null : Long.valueOf(id.toString());
+        return extractAllClaims(token).get("userId", Long.class);
     }
 
     public boolean isTokenValid(String token, String username) {
@@ -62,7 +58,7 @@ public class JwtUtil {
 
     public Jws<Claims> parseToken(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token);
     }
