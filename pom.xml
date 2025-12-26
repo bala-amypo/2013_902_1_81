@@ -6,57 +6,73 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- ✅ SPRING BOOT PARENT -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.5</version>
+        <relativePath/>
+    </parent>
+
     <groupId>com.example</groupId>
     <artifactId>demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <!-- ⚠️ & must be escaped as &amp; -->
     <name>Digital Asset Lifecycle &amp; Audit Trail API</name>
 
     <properties>
         <java.version>17</java.version>
-        <spring.boot.version>3.2.5</spring.boot.version>
     </properties>
 
     <dependencies>
 
-        <!-- ===== Spring Core ===== -->
+        <!-- ================= CORE ================= -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>${spring.boot.version}</version>
         </dependency>
 
+        <!-- ================= WEB (FIXES SERVLET + MVC + FILTERS) ================= -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- ================= JPA ================= -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>${spring.boot.version}</version>
         </dependency>
 
+        <!-- ================= SECURITY ================= -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-            <version>${spring.boot.version}</version>
         </dependency>
 
-        <!-- ===== JWT ===== -->
+        <!-- ================= JWT ================= -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>0.9.1</version>
         </dependency>
 
-        <!-- ===== Database (runtime only) ===== -->
+        <!-- ================= SWAGGER / OPENAPI ================= -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+
+        <!-- ================= MYSQL ================= -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
 
-        <!-- ===== TESTING ===== -->
-
-        <!-- TestNG (REQUIRED) -->
+        <!-- ================= TESTING ================= -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
@@ -64,7 +80,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Mockito -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -72,11 +87,9 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Spring Test -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>6.1.6</version>
             <scope>test</scope>
         </dependency>
 
@@ -85,17 +98,16 @@
     <build>
         <plugins>
 
-            <!-- Java 17 Compiler -->
+            <!-- JAVA 17 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
                 <configuration>
                     <release>17</release>
                 </configuration>
             </plugin>
 
-            <!-- Surefire for TestNG -->
+            <!-- TESTNG -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
