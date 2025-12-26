@@ -1,10 +1,9 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "lifecycle_events")
 public class LifecycleEvent {
 
     @Id
@@ -23,8 +22,10 @@ public class LifecycleEvent {
 
     public LifecycleEvent() {}
 
-    public LifecycleEvent(Long id, Asset asset, String eventType,
-                          String eventDescription, LocalDateTime eventDate,
+    public LifecycleEvent(Long id, Asset asset,
+                          String eventType,
+                          String eventDescription,
+                          LocalDateTime eventDate,
                           User performedBy) {
         this.id = id;
         this.asset = asset;
@@ -36,18 +37,21 @@ public class LifecycleEvent {
 
     @PrePersist
     public void prePersist() {
-        if (eventDate == null) eventDate = LocalDateTime.now();
+        if (eventDate == null) {
+            eventDate = LocalDateTime.now();
+        }
     }
 
-    // getters & setters
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
     public Asset getAsset() { return asset; }
-    public void setAsset(Asset asset) { this.asset = asset; }
-    public String getEventType() { return eventType; }
-    public void setEventType(String eventType) { this.eventType = eventType; }
-    public String getEventDescription() { return eventDescription; }
-    public void setEventDescription(String eventDescription) { this.eventDescription = eventDescription; }
     public User getPerformedBy() { return performedBy; }
+    public LocalDateTime getEventDate() { return eventDate; }
+
+    public void setId(Long id) { this.id = id; }
+    public void setAsset(Asset asset) { this.asset = asset; }
     public void setPerformedBy(User performedBy) { this.performedBy = performedBy; }
+    public void setEventType(String eventType) { this.eventType = eventType; }
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
+    }
 }
