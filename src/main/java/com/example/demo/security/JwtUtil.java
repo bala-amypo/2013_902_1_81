@@ -9,13 +9,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * THIS VERSION IS COMPATIBLE WITH YOUR TEST FILE
+ * AND YOUR JJWT LIBRARY VERSION
+ */
 public class JwtUtil {
 
-    // 🔐 MUST be at least 256 bits for HS256
     private static final String SECRET =
             "THIS_IS_A_VERY_LONG_SECRET_KEY_FOR_JWT_SIGNING_256_BITS_LONG";
 
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60; // 1 hour
+    private static final long EXPIRATION_TIME = 1000 * 60 * 60;
 
     private final SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
@@ -38,19 +41,18 @@ public class JwtUtil {
         claims.put("email", user.getEmail());
         claims.put("role", user.getRole());
         claims.put("userId", user.getId());
-
         return generateToken(claims, user.getEmail());
     }
 
     /* ---------------------------------------------------
-       TOKEN PARSING (THIS IS CRITICAL)
+       PARSING — RETURN WRAPPER (CRITICAL FIX)
      --------------------------------------------------- */
 
-    public Jws<Claims> parseToken(String token) {
-        return Jwts.parserBuilder()
+    public ParsedToken parseToken(String token) {
+        Jws<Claims> jws = Jwts.parser()
                 .setSigningKey(key)
-                .build()
                 .parseClaimsJws(token);
+        return new ParsedToken(jws.getBody());
     }
 
     /* ---------------------------------------------------
@@ -74,20 +76,39 @@ public class JwtUtil {
     }
 
     /* ---------------------------------------------------
-       TOKEN VALIDATION
+       VALIDATION
      --------------------------------------------------- */
 
     public boolean isTokenValid(String token, String username) {
         try {
-            String extracted = extractUsername(token);
-            return extracted.equals(username) && !isTokenExpired(token);
+            return extractUsername(token).equals(username)
+                    && !isTokenExpired(token);
         } catch (Exception e) {
             return false;
         }
     }
 
     private boolean isTokenExpired(String token) {
-        Date expiration = parseToken(token).getPayload().getExpiration();
-        return expiration.before(new Date());
+        return parseToken(token)
+                .getPayload()
+                .getExpiration()
+                .before(new Date());
+    }
+
+    /* ---------------------------------------------------
+       INNER WRAPPER CLASS (TEST NEEDS THIS)
+     --------------------------------------------------- */
+
+    public static class ParsedToken {
+        private final Claims claims;
+
+        public ParsedToken(Claims claims) {
+            this.claims = claims;
+        }
+
+        // 🔥 THIS METHOD MAKES THE TEST PASS
+        public Claims getPayload() {
+            return claims;
+        }
     }
 }
